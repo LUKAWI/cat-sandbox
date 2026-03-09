@@ -1,0 +1,31 @@
+# 敏感信息 - 绝不上传
+*.key
+*.pem
+*.p12
+secrets.json
+.env
+.env.*
+
+# 实际配置文件（包含密钥）
+openclaw.json
+
+# 备份文件
+*.bak
+backups/
+
+# 日志文件
+logs/
+*.log
+
+# 依赖目录
+node_modules/
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

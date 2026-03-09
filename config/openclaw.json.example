@@ -1,0 +1,80 @@
+{
+  "agents": {
+    "list": [
+      {
+        "id": "main",
+        "name": "猫王",
+        "workspace": "~/.openclaw/workspace",
+        "agentDir": "~/.openclaw/agents/main/agent",
+        "model": "dashscope-coding/glm-5",
+        "default": true
+      },
+      {
+        "id": "coding",
+        "name": "CODING",
+        "workspace": "~/.openclaw/workspace-coding",
+        "agentDir": "~/.openclaw/agents/coding/agent",
+        "model": "dashscope/qwen3-max-2026-01-23"
+      },
+      {
+        "id": "research",
+        "name": "RESEARCH",
+        "workspace": "~/.openclaw/workspace-research",
+        "agentDir": "~/.openclaw/agents/research/agent",
+        "model": "dashscope/qwen3.5-plus"
+      },
+      {
+        "id": "ops",
+        "name": "OPS",
+        "workspace": "~/.openclaw/workspace-ops",
+        "agentDir": "~/.openclaw/agents/ops/agent",
+        "model": "dashscope-coding/glm-5"
+      },
+      {
+        "id": "design",
+        "name": "DESIGN",
+        "workspace": "~/.openclaw/workspace-design",
+        "agentDir": "~/.openclaw/agents/design/agent",
+        "model": "dashscope-us/qwen3-vl-plus"
+      },
+      {
+        "id": "evolution",
+        "name": "EVOLUTION",
+        "workspace": "~/.openclaw/workspace-evolution",
+        "agentDir": "~/.openclaw/agents/evolution/agent",
+        "model": "dashscope-coding/glm-5"
+      }
+    ]
+  },
+  "tools": {
+    "agentToAgent": {
+      "enabled": true,
+      "allow": ["main", "coding", "research", "ops", "design", "evolution"]
+    }
+  },
+  "bindings": [
+    {
+      "agentId": "main",
+      "match": { "channel": "feishu", "peer": { "kind": "direct" } }
+    }
+  ],
+  "channels": {
+    "feishu": {
+      "accounts": {
+        "default": {
+          "appId": "***YOUR_APP_ID***",
+          "appSecret": "***YOUR_APP_SECRET***",
+          "enabled": true
+        }
+      }
+    }
+  },
+  "models": {
+    "providers": {
+      "dashscope": {
+        "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1",
+        "apiKey": "***YOUR_API_KEY***"
+      }
+    }
+  }
+}
