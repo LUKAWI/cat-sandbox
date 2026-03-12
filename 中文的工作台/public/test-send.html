@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Send 功能测试</title>
+  <style>
+    body {
+      background: #1e1e1e;
+      color: #ffffff;
+      font-family: 'Consolas', monospace;
+      padding: 20px;
+    }
+    .test-box {
+      background: #252526;
+      border: 1px solid #3c3c3c;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+    button {
+      background: #007acc;
+      color: white;
+      border: 1px solid #005a9e;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background: #0098e6;
+    }
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+    textarea {
+      width: 100%;
+      background: #1e1e1e;
+      border: 1px solid #3c3c3c;
+      color: #ffffff;
+      padding: 10px;
+      font-family: 'Consolas', monospace;
+      font-size: 14px;
+      min-height: 100px;
+    }
+    .log {
+      background: #1e1e1e;
+      border: 1px solid #3c3c3c;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 12px;
+      white-space: pre-wrap;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    .success { color: #4ec9b0; }
+    .error { color: #f44336; }
+    .info { color: #569cd6; }
+  </style>
+</head>
+<body>
+  <h1>🧪 Send 功能调试页面</h1>
+  
+  <div class="test-box">
+    <h3>测试 1: 输入框颜色</h3>
+    <textarea id="testInput" placeholder="输入文字，应该是白色..."></textarea>
+  </div>
+  
+  <div class="test-box">
+    <h3>测试 2: Button 点击</h3>
+    <button id="testButton">点击测试</button>
+    <p>当前状态：<span id="buttonStatus">enabled</span></p>
+  </div>
+  
+  <div class="test-box">
+    <h3>测试 3: API 调用</h3>
+    <button id="apiButton">调用 /api/chat</button>
+  </div>
+  
+  <div class="test-box">
+    <h3>控制台日志</h3>
+    <div class="log" id="log"></div>
+    <button onclick="document.getElementById('log').innerHTML=''">清空日志</button>
+  </div>
+
+  <script>
+    const log = document.getElementById('log')
+    const testInput = document.getElementById('testInput')
+    const testButton = document.getElementById('testButton')
+    const apiButton = document.getElementById('apiButton')
+    const buttonStatus = document.getElementById('buttonStatus')
+
+    function addLog(message, type = 'info') {
+      const timestamp = new Date().toLocaleTimeString('zh-CN')
+      const className = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info'
+      log.innerHTML += `<span class="${className}">[${timestamp}] ${message}</span>\n`
+      log.scrollTop = log.scrollHeight
+    }
+
+    // 测试 1: 输入框颜色
+    testInput.addEventListener('input', (e) => {
+      addLog(`输入框内容：${e.target.value}`, 'info')
+    })
+
+    // 测试 2: Button 点击
+    testButton.addEventListener('click', () => {
+      addLog('✅ Button 点击事件触发！', 'success')
+    })
+
+    // 测试 3: API 调用
+    apiButton.addEventListener('click', async () => {
+      try {
+        addLog('📡 开始调用 /api/chat...', 'info')
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            message: 'test from debug page',
+            session_id: 'default',
+            agent_id: 'main'
+          })
+        })
+        
+        addLog(`响应状态：${response.status} ${response.ok ? '✅' : '❌'}`, response.ok ? 'success' : 'error')
+        
+        const data = await response.json()
+        addLog(`响应数据：${JSON.stringify(data, null, 2)}`, 'success')
+      } catch (err) {
+        addLog(`❌ 错误：${err.message}`, 'error')
+      }
+    })
+
+    // 页面加载完成
+    addLog('🚀 测试页面加载完成', 'success')
+    addLog('1. 在输入框打字，检查颜色是否为白色', 'info')
+    addLog('2. 点击"点击测试"按钮，检查是否触发事件', 'info')
+    addLog('3. 点击"调用 /api/chat"按钮，检查 API 是否正常', 'info')
+  </script>
+</body>
+</html>
